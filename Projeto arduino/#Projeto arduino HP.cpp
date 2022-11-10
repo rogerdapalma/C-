@@ -1,14 +1,13 @@
-#include 
+#include <LiquidCrystal.h>   //Libreria del display LCD
 
 #define TONO_ERROR 600
 
 #define TIME_INTERVAL 3000
 
 
-LiquidCrystal lcd(7, 8, 9, 10, 11, 12); 
+LiquidCrystal lcd(7, 8, 9, 10, 11, 12);    //Inicializamos la libreria con el numero de los pines a utilizar
 
-
-int led = 5; //alarme
+int motor = 5; //motor de vibração 
 
 int horas = 0; //mostra as horas
 
@@ -23,7 +22,7 @@ int msg = 0; //Barrera para el mensaje de bienvenida
 
 int start = A1; //iniciador
 
-int começar = 1024; //Variável para armazenamento do botão iniciar
+int inicializar = 1024; //Variável para armazenamento do botão iniciar
 
 int buth = A5; //Botão de Horas
 
@@ -47,7 +46,7 @@ lcd.begin(16, 2); // Configuramos o número de colunas e linhas do LCD..
 
 
 
-pinMode(led, OUTPUT); //Pin de alarme --> Salida
+pinMode(motor, OUTPUT); //Pin de alarme --> Salida
 
 pinMode(buth, INPUT); //pino de botão horas --> Entrada
 
@@ -61,7 +60,7 @@ pinMode(start, INPUT); //pino de botão iniciar --> Entrada
 
 msg = 0; //mensagem de boas-vindas
 
-começar = 1024; 
+inicializar = 1024; 
 
 
 
@@ -92,7 +91,7 @@ lcd.print("Temporizador ");
 
 lcd.setCursor(1,1);
 
-lcd.print("Projeto HP ");
+lcd.print("PROJETOdasGURIAS");
 
 delay(2500);
 
@@ -194,7 +193,7 @@ lcd.print(segundos); // Sem este código, ele é exibido assim: H:M:S (H:M:1)
 
 } while(analogRead(start) == 0);// O menu de escolha do tempo é repetido até pressionarmos o botão iniciar.
 
-
+digitalWrite(motor, HIGH);
 
 
 segundostotal = segundos + (minutos * 60) + (horas * 60 * 60); //Converte o tempo escolhido em segundos!!
@@ -250,8 +249,7 @@ lcd.print(segundos); // Sem este código, ele é exibido assim: H:M:S (H:M:1)
 
 
 if (segundostotal == 0) //Se o tempo acabar
-// desliga o motor
-
+  
 {
 
 while(1) // Loop infinito mostrando mensagem e campainha soando intermitentemente
@@ -267,9 +265,6 @@ lcd.print("tempo");
 lcd.setCursor(3,1);
 
 lcd.print("finalizado");
-
-
-
 
 
 sonarTono(TONO_ERROR,TIME_INTERVAL);
@@ -289,7 +284,7 @@ exit(0);
 
 //------------------------------------
 
-//liga led 
+//desliga o motor 
 
 
 //------------------------------------
@@ -298,8 +293,7 @@ void sonarTono(int tono, int duracion)
 
 {
 
-tone(led,tono,duracion);
-digitalWrite(led, HIGH);
+tone(motor,tono,duracion);
+digitalWrite(motor, LOW);
 delay(duracion);
-
 }
